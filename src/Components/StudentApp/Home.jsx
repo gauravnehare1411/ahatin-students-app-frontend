@@ -9,7 +9,9 @@ import FinancialInformation from './ApplicationForm/FinancialInformation';
 export default function Home() {
   const [step, setStep] = useState(1);
 
-  const nextStep = () => setStep(step + 1);
+  const nextStep = () => {
+    setStep(step + 1);
+  }
   const prevStep = () => setStep(step - 1);
 
   const renderStep = () => {

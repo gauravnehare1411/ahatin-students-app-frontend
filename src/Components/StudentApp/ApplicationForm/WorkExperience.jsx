@@ -1,18 +1,29 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
+import { useFormStore } from "../formStore";
 
 export default function WorkExperience({ nextStep, prevStep }) {
-  const [hasExperience, setHasExperience] = useState("");
-  const [experience, setExperience] = useState({
-    jobTitle: "",
-    isRelated: "",
-    companyName: "",
-    years: ""
-  });
+  const { formData, setWorkExperience } = useFormStore();
+
+  const [hasExperience, setHasExperience] = useState(formData.workExperience.hasExperience || "");
+  const [experience, setExperience] = useState(
+    formData.workExperience.experience || {
+      jobTitle: "",
+      isRelated: "",
+      companyName: "",
+      years: ""
+    });
 
   const handleChange = (field, value) => {
     setExperience({ ...experience, [field]: value });
   };
+
+  const handleSubmit = () => {
+    setWorkExperience({hasExperience, experience});
+    console.log(useFormStore.getState().formData);
+
+    nextStep();
+  }
 
   return (
     <Card>
@@ -80,8 +91,8 @@ export default function WorkExperience({ nextStep, prevStep }) {
           <Button variant="secondary" onClick={prevStep}>
             Previous
           </Button>
-          <Button variant="primary" onClick={nextStep}>
-            Next
+          <Button variant="primary" onClick={handleSubmit}>
+            Submit & Next
           </Button>
         </div>
       </Card.Body>

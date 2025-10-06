@@ -1,35 +1,48 @@
 import React, { useState } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
+import { useFormStore } from "../formStore";
 
 export default function Certifications({ nextStep, prevStep }) {
-  const [hasCertifications, setHasCertifications] = useState("");
-  const [scores, setScores] = useState({
-    ielts: "",
-    toefl: "",
-    pte: ""
-  });
+  const { formData, setCertifications } = useFormStore();
+  
+  const [hasCertifications, setHasCertifications] = useState(formData.certifications.hasCertifications || "");
+  const [scores, setScores] = useState(
+    formData.certifications.scores || {
+      ielts: "",
+      toefl: "",
+      pte: ""
+    });
 
   const handleScoreChange = (field, value) => {
     setScores({ ...scores, [field]: value });
   };
 
+  const handleSubmit = () => {
+    setCertifications({hasCertifications, scores});
+    console.log(useFormStore.getState().formData);
+    nextStep();
+  }
+
   return (
     <Card>
       <Card.Body>
         <h3>Certifications & Test Scores</h3>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Do you have certifications?</Form.Label>
-          <Form.Select
-            value={hasCertifications}
-            onChange={(e) => setHasCertifications(e.target.value)}
-          >
-            <option value="">Select</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </Form.Select>
-        </Form.Group>
-
+        <Row>
+          <Col md={4}>
+            <Form.Group className="mb-3">
+              <Form.Label>Do you have certifications?</Form.Label>
+              <Form.Select
+                value={hasCertifications}
+                onChange={(e) => setHasCertifications(e.target.value)}
+              >
+                <option value="">Select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
+        
         {hasCertifications === "yes" && (
           <>
             <Row className="mb-3">
@@ -68,8 +81,8 @@ export default function Certifications({ nextStep, prevStep }) {
           <Button variant="secondary" onClick={prevStep}>
             Previous
           </Button>
-          <Button variant="primary" onClick={nextStep}>
-            Next
+          <Button variant="primary" onClick={handleSubmit}>
+            Submit & Next
           </Button>
         </div>
       </Card.Body>

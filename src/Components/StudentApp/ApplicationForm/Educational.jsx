@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import { useFormStore } from "../formStore";
 
 const qualificationOptions = ["Master's", "Bachelor's", "12th", "10th"];
 
 const EducationalBackground = ({ nextStep }) => {
-  const [highestQualification, setHighestQualification] = useState({
-    type: "",
-    school: "",
-    board: "",
-    year: "",
-    percentage: ""
-  });
+  const { formData, setEducational } = useFormStore();
 
-  const [previousQualifications, setPreviousQualifications] = useState([]);
+  const [highestQualification, setHighestQualification] = useState(
+    formData.educational.highestQualification || {
+      type: "",
+      school: "",
+      board: "",
+      year: "",
+      percentage: ""
+    }
+  );
+
+  const [previousQualifications, setPreviousQualifications] = useState(
+    formData.educational.previousQualifications || []
+  );
 
   const addQualification = () => {
     setPreviousQualifications([
@@ -35,6 +42,16 @@ const EducationalBackground = ({ nextStep }) => {
     const newQualifications = [...previousQualifications];
     newQualifications.splice(index, 1);
     setPreviousQualifications(newQualifications);
+  };
+
+  const handleSubmit = () => {
+    setEducational({highestQualification, previousQualifications});
+
+    console.log(useFormStore.getState().formData);
+
+    if (nextStep) {
+      nextStep();
+    }
   };
 
   return (
@@ -159,7 +176,7 @@ const EducationalBackground = ({ nextStep }) => {
           </Button>
 
           <div className="mt-4">
-            <Button onClick={nextStep}>Next</Button>
+            <Button onClick={handleSubmit}>Submit & Next</Button>
           </div>
         </Card.Body>
       </Card>

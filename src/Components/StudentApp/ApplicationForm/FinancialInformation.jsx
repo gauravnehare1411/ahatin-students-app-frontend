@@ -1,17 +1,28 @@
 import React, { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
+import { useFormStore } from "../formStore";
+import { toast } from "react-toastify";
 
 const fundingOptions = ["Self", "Parents", "Loan", "Scholarship", "Sponsor"];
 
 export default function FinancialInformation({ prevStep, nextStep }) {
-  const [finance, setFinance] = useState({
-    estimatedBudget: "",
-    sourceOfFunding: ""
-  });
+  const { formData, setFinancialInformation } = useFormStore();
+
+  const [finance, setFinance] = useState(
+    formData.financialInformation || {
+      estimatedBudget: "",
+      sourceOfFunding: ""
+    });
 
   const handleChange = (field, value) => {
     setFinance({ ...finance, [field]: value });
   };
+
+  const handleSubmit = () => {
+    setFinancialInformation(finance);
+    console.log(useFormStore.getState().formData);
+    toast.success("Application Submitted Successfully..")
+  }
 
   return (
     <Card>
@@ -45,7 +56,7 @@ export default function FinancialInformation({ prevStep, nextStep }) {
           <Button variant="secondary" onClick={prevStep}>
             Previous
           </Button>
-          <Button variant="primary">
+          <Button variant="primary" onClick={handleSubmit}>
             Submit
           </Button>
         </div>

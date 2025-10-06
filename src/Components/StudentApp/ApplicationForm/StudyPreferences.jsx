@@ -1,21 +1,32 @@
 import React, { useState } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
+import { useFormStore } from "../formStore";
 
 const degreeOptions = ["UG", "PG", "PhD", "Diploma"];
 
 export default function StudyPreferences({ nextStep, prevStep }) {
-  const [preferences, setPreferences] = useState({
-    preferredCountry: "",
-    preferredCourse: "",
-    preferredIntakeMonth: "",
-    preferredIntakeYear: "",
-    degreeLevel: "",
-    preferredUniversities: ""
-  });
+  const { formData, setStudyPreferences } = useFormStore();
+
+  const [preferences, setPreferences] = useState(
+    formData.studyPreferences || {
+      preferredCountry: "",
+      preferredCourse: "",
+      preferredIntakeMonth: "",
+      preferredIntakeYear: "",
+      degreeLevel: "",
+      preferredUniversities: ""
+    }
+  );
 
   const handleChange = (field, value) => {
     setPreferences({ ...preferences, [field]: value });
   };
+
+  const handleSubmit = () => {
+    setStudyPreferences(preferences);
+    console.log(useFormStore.getState().formData);
+    nextStep();
+  }
 
   return (
     <Card>
@@ -99,8 +110,8 @@ export default function StudyPreferences({ nextStep, prevStep }) {
           <Button variant="secondary" onClick={prevStep}>
             Previous
           </Button>
-          <Button variant="primary" onClick={nextStep}>
-            Next
+          <Button variant="primary" onClick={handleSubmit}>
+            Submit & Next
           </Button>
         </div>
       </Card.Body>
