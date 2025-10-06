@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
-import { useFormStore } from "../formStore";
+import { useFormStore } from "../../../store/formStore";
 
 export default function WorkExperience({ nextStep, prevStep }) {
   const { formData, setWorkExperience } = useFormStore();

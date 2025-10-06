@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
-import { useFormStore } from "../formStore";
+import { useFormStore } from "../../../store/formStore";
 import { toast } from "react-toastify";
 
 const fundingOptions = ["Self", "Parents", "Loan", "Scholarship", "Sponsor"];

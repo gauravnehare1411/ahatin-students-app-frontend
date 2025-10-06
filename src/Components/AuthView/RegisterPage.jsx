@@ -77,13 +77,13 @@ const RegisterPage = () => {
 
             <Form onSubmit={handleRegister}>
               <Form.Group className="mb-3">
-                <Form.Label>Name</Form.Label>
+                <Form.Label>Full Name</Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Your full name"
+                  placeholder="Full Name"
                   required
                 />
               </Form.Group>
@@ -95,7 +95,19 @@ const RegisterPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Your email address"
+                  placeholder="Email Address"
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="contactnumber"
+                  value={formData.contactnumber}
+                  onChange={handleChange}
+                  placeholder="Phone Number"
                   required
                 />
               </Form.Group>

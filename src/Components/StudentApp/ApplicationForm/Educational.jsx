@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
-import { useFormStore } from "../formStore";
+import { useFormStore } from "../../../store/formStore";
 
 const qualificationOptions = ["Master's", "Bachelor's", "12th", "10th"];
 
