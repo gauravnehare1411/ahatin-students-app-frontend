@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { useFormStore } from "../../../store/formStore";
 import { toast } from "react-toastify";
+import api from "../../../api";
 
 const fundingOptions = ["Self", "Parents", "Loan", "Scholarship", "Sponsor"];
 
-export default function FinancialInformation({ prevStep, nextStep }) {
+export default function FinancialInformation({ prevStep }) {
   const { formData, setFinancialInformation } = useFormStore();
 
   const [finance, setFinance] = useState(
@@ -18,10 +19,20 @@ export default function FinancialInformation({ prevStep, nextStep }) {
     setFinance({ ...finance, [field]: value });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setFinancialInformation(finance);
-    console.log(useFormStore.getState().formData);
-    toast.success("Application Submitted Successfully..")
+    const finalData = useFormStore.getState().formData;
+
+    try {
+      const response = await api.post(
+        "/submit-application",
+        finalData
+      );
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error("Error submitting application");
+      console.error(error);
+    }
   }
 
   return (

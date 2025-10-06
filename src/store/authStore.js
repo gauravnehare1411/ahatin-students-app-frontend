@@ -3,6 +3,8 @@ import { create } from "zustand";
 const useAuthStore = create((set) => ({
     isLoggedIn: !!localStorage.getItem('access_token'),
     userRoles: JSON.parse(localStorage.getItem("roles") || '[]'),
+    accessToken: localStorage.getItem('access_token') || null,
+    refreshToken: localStorage.getItem('refresh_token') || null,
 
     login: () => {
         set({

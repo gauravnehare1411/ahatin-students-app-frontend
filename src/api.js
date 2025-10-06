@@ -1,7 +1,27 @@
 import axios from 'axios';
+import useAuthStore from './store/authStore';
 
 const api = axios.create({
   baseURL: 'http://127.0.0.1:8000',
 });
+
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token');
+    const skipAuth = ['/token', '/register'];
+    const isAuthEndpoint = skipAuth.some((url) => config.url.includes(url));
+
+    if (token && !isAuthEndpoint) {
+      config.headers.Authorization = `Bearer ${token}`;
+      console.log('✅ Token attached to:', config.url);
+    } else {
+      console.log('🚫 Token not attached to:', config.url);
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default api;
