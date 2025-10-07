@@ -3,8 +3,9 @@ import RegisterPage from './Components/AuthView/RegisterPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './Components/AuthView/LoginPage';
 import { ToastContainer } from 'react-toastify';
-import Home from './Components/StudentApp/Home';
 import ProtectedRoute from './Context/ProtectedRoute.jsx';
+import FormsApp from './Components/StudentApp/FormsApp.jsx';
+import StudentDashboard from './Components/StudentApp/StudentDashboard.jsx';
 
 function App() {
   return (
@@ -12,11 +13,13 @@ function App() {
       <div>
         <Router>
           <Routes>
-            <Route path="/" element={
+            <Route path="/application/*" element={
               <ProtectedRoute allowedRoles={["student"]}>
-                <Home />
+                <FormsApp />
               </ProtectedRoute>
             } />
+
+            <Route path='/' element={<StudentDashboard />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage/>} />
           </Routes>

@@ -48,6 +48,8 @@ const RegisterPage = () => {
       localStorage.setItem('access_token', res.data.access_token);
       localStorage.setItem('refresh_token', res.data.refresh_token);
       localStorage.setItem('roles', JSON.stringify(res.data.roles));
+      localStorage.setItem('token_type', res.data.token_type);
+      localStorage.setItem('expires_in', res.data.expires_in);
       login();
       toast.success('Registration successful!');
       navigate('/');

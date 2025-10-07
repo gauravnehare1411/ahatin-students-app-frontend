@@ -6,7 +6,7 @@ import Certifications from './ApplicationForm/Certifications';
 import WorkExperience from './ApplicationForm/WorkExperience';
 import FinancialInformation from './ApplicationForm/FinancialInformation';
 
-export default function Home() {
+export default function ApplicationForm() {
   const [step, setStep] = useState(1);
 
   const nextStep = () => {
