@@ -3,11 +3,14 @@ import { Card, Form, Button } from "react-bootstrap";
 import { useFormStore } from "../../../store/formStore";
 import { toast } from "react-toastify";
 import api from "../../../api";
+import { useNavigate } from "react-router-dom";
 
 const fundingOptions = ["Self", "Parents", "Loan", "Scholarship", "Sponsor"];
 
 export default function FinancialInformation({ prevStep }) {
-  const { formData, setFinancialInformation } = useFormStore();
+  const { formData, setFinancialInformation, resetForm } = useFormStore();
+
+  const navigate = useNavigate();
 
   const [finance, setFinance] = useState(
     formData.financialInformation || {
@@ -29,6 +32,8 @@ export default function FinancialInformation({ prevStep }) {
         finalData
       );
       toast.success(response.data.message);
+      resetForm();
+      navigate('/');
     } catch (error) {
       toast.error("Error submitting application");
       console.error(error);
