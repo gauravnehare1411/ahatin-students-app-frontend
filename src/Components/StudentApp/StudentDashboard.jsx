@@ -3,15 +3,12 @@ import { Card, Table, Spinner, Row, Col, Button, Container } from "react-bootstr
 import api from "../../api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../../store/authStore";
 import Header from "../includes/Header";
 
 export default function StudentDashboard() {
   const [profile, setProfile] = useState(null);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const { logout } = useAuthStore();
 
   const navigate = useNavigate()
 
@@ -33,11 +30,6 @@ export default function StudentDashboard() {
     fetchData();
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
   if (loading) return <Spinner animation="border" className="m-5" />;
 
   return (
@@ -54,13 +46,13 @@ export default function StudentDashboard() {
             <ul className="list-unstyled">
                 <li><strong>Name:</strong> {profile.name}</li>
                 <li><strong>Email:</strong> {profile.email}</li>
-                <li><strong>Contact:</strong> {profile.contactnumber}</li>
+                <li><strong>Phone:</strong> {profile.contactnumber}</li>
             </ul>
             )}
         </Card>
 
         <Card className="shadow-sm p-3">
-            <h5>Submitted Applications</h5>
+            <h5>Applications</h5>
             {applications.length === 0 ? (
             <p className="text-muted">No applications yet.</p>
             ) : (

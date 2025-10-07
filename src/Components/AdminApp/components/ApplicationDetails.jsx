@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Table, Card, Spinner, ListGroup } from "react-bootstrap";
+import { Container, Row, Col, Table, Card, Spinner, Button, Form } from "react-bootstrap";
 import api from "../../../api";
+import { toast } from "react-toastify";
 
 const ApplicationDetails = () => {
   const { application_id } = useParams();
   const [application, setApplication] = useState(null);
   const [status, setStatus] = useState("Submitted");
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     async function fetchApplication() {
@@ -24,6 +26,20 @@ const ApplicationDetails = () => {
     fetchApplication();
   }, [application_id]);
 
+  const handleStatusChange = async () => {
+    try {
+      setUpdating(true);
+      await api.put(`/admin/application/${application_id}/status`, { status });
+      setApplication((prev) => ({ ...prev, status }));
+      toast.success("Status updated successfully!");
+    } catch (err) {
+      console.error("Error updating status:", err);
+      toast.error("Failed to update status.");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   if (!application) {
     return (
       <div className="text-center mt-5">
@@ -32,79 +48,34 @@ const ApplicationDetails = () => {
     );
   }
 
-  const steps = ["Submitted", "Under Review", "Accepted", "Rejected"];
-
-  const getStatusColor = (step) => {
-  const stepIndex = steps.indexOf(step);
-  const currentIndex = steps.indexOf(status);
-
-  if (status === "Rejected") {
-    if (step === "Rejected") return "danger";
-    if (step === "Accepted") return "secondary";
-    return stepIndex < currentIndex ? "success" : "secondary";
-  }
-
-  if (status === "Accepted") {
-    if (step === "Accepted") return "success";
-    return stepIndex < currentIndex ? "success" : "secondary";
-  }
-
-  if (stepIndex < currentIndex) return "success";
-  if (stepIndex === currentIndex) return "primary";
-  return "secondary";
-};
-
   return (
-    <Container fluid className="p-4">
+    <Container fluid className="p-2">
       <Row>
-        <Col md={4} className="mb-4">
-            <Card className="shadow-sm">
-            <Card.Header className="bg-primary text-white">
-                <strong>Application Tracker</strong>
-            </Card.Header>
-            <ListGroup variant="flush">
-                {steps.map((step, index) => {
-                const statusColor = getStatusColor(step);
-                const colors = {
-                    success: { bg: "green", text: "white" },
-                    primary: { bg: "#007bff", text: "white" },
-                    secondary: { bg: "lightgray", text: "black" },
-                    danger: { bg: "#dc3545", text: "white" }
-                };
-                
-                const currentColor = colors[statusColor] || colors.secondary;
-
-                return (
-                    <ListGroup.Item key={step} className="d-flex align-items-center mb-2">
-                    <div
-                        style={{
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "50%",
-                        backgroundColor: currentColor.bg,
-                        color: currentColor.text,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginRight: "10px",
-                        fontWeight: "bold",
-                        }}
-                    >
-                        {index + 1}
-                    </div>
-                    <span>{step}</span>
-                    </ListGroup.Item>
-                );
-                })}
-            </ListGroup>
-            </Card>
-        </Col>
-
-        <Col md={8}>
+        <Col>
           <Card className="shadow-sm mb-4">
             <Card.Header className="bg-primary text-white">
               <strong>Application Details</strong>
+              <div className="d-flex align-items-center">
+                <Form.Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  style={{ maxWidth:"200px", marginRight: "10px" }}
+                >
+                  <option value="Submitted">Submitted</option>
+                  <option value="Under Review">Under Review</option>
+                  <option value="Accepted">Accepted</option>
+                  <option value="Rejected">Rejected</option>
+                </Form.Select>
+                <Button
+                  variant="light"
+                  disabled={updating}
+                  onClick={handleStatusChange}
+                >
+                  {updating ? "Updating..." : "Update Status"}
+                </Button>
+              </div>
             </Card.Header>
+
             <Card.Body>
               {/* Education */}
               <h5 className="mb-3 text-primary">Educational Details</h5>

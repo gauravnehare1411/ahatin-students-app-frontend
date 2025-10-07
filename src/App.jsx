@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './Context/ProtectedRoute.jsx';
 import FormsApp from './Components/StudentApp/FormsApp.jsx';
 import StudentDashboard from './Components/StudentApp/StudentDashboard.jsx';
+import AdminApp from './Components/AdminApp/AdminApp.jsx';
 
 function App() {
   return (
@@ -19,7 +20,18 @@ function App() {
               </ProtectedRoute>
             } />
 
-            <Route path='/' element={<StudentDashboard />} />
+            <Route path="/" element={
+              <ProtectedRoute allowedRoles={["student"]}>
+                <StudentDashboard />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/admin/*" element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminApp />
+              </ProtectedRoute>
+            } />
+            
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage/>} />
           </Routes>

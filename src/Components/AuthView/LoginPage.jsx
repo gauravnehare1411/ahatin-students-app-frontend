@@ -37,7 +37,14 @@ const LoginPage = () => {
       
       login();
       toast.success("Logged in successful.");
-      navigate('/');
+
+      if (res.data.roles?.includes('student')){
+        console.log(res.data.roles?.includes('student'));
+        navigate('/');
+      } else {
+        console.log(res.data.roles?.includes('student'));
+        navigate('/admin');
+      }
       
     } catch (err) {
       setError('Login failed: ' + (err.response?.data?.detail || 'Wrong email or password'));

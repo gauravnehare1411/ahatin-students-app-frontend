@@ -5,12 +5,20 @@ import useAuthStore from '../../store/authStore';
 
 export default function Header() {
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logout, userRoles } = useAuthStore();
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  const navigateDashboard = () => {
+    if (userRoles.includes('student')){
+        navigate('/');
+    } else {
+        navigate('/admin');
+    }
+  }
 
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm border-bottom">
@@ -32,7 +40,7 @@ export default function Header() {
         <div className="d-flex align-items-center gap-3">
           <Button
             variant="primary"
-            onClick={() => navigate('/')}
+            onClick={navigateDashboard}
             className="px-3 py-1"
           >
             Dashboard
