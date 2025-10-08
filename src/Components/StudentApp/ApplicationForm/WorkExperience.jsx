@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import { useFormStore } from "../../../store/formStore";
+import { toast } from "react-toastify";
 
 export default function WorkExperience({ nextStep, prevStep }) {
   const { formData, setWorkExperience } = useFormStore();
@@ -19,6 +20,11 @@ export default function WorkExperience({ nextStep, prevStep }) {
   };
 
   const handleSubmit = () => {
+    if (!hasExperience) {
+      toast.error("Please fill the required fields");
+      return
+    }
+    
     setWorkExperience({hasExperience, experience});
     console.log(useFormStore.getState().formData);
 
@@ -31,7 +37,7 @@ export default function WorkExperience({ nextStep, prevStep }) {
         <h3>Work Experience</h3>
 
         <Form.Group className="mb-3">
-          <Form.Label>Do you have any work experience?</Form.Label>
+          <Form.Label>Do you have any work experience? <span style={{color:"red"}}>*</span></Form.Label>
           <Form.Select
             value={hasExperience}
             onChange={(e) => setHasExperience(e.target.value)}

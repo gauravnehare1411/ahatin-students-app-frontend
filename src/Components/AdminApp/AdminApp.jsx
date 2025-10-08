@@ -6,6 +6,7 @@ import StudentApplications from './components/StudentApplications';
 import { Container } from 'react-bootstrap';
 import Header from '../includes/Header';
 import ApplicationDetails from './components/ApplicationDetails';
+import EditApplication from './components/EditApplication';
 
 const AdminApp = () => {
   return (
@@ -16,7 +17,8 @@ const AdminApp = () => {
         <Routes>
             <Route path="/" element={<AdminDashboard />} />
             <Route path="/:userId" element={<StudentApplications />} />
-            <Route path="/application/:application_id" element={<ApplicationDetails />} />
+            <Route path="/applications/:application_id" element={<ApplicationDetails />} />
+            <Route path="/applications/:application_id/edit" element={<EditApplication />} />
         </Routes>
         </div>
       </Container>

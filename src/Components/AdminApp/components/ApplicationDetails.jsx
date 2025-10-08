@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Container, Row, Col, Table, Card, Spinner, Button, Form } from "react-bootstrap";
 import api from "../../../api";
 import { toast } from "react-toastify";
@@ -9,6 +9,8 @@ const ApplicationDetails = () => {
   const [application, setApplication] = useState(null);
   const [status, setStatus] = useState("Submitted");
   const [updating, setUpdating] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchApplication() {
@@ -55,25 +57,40 @@ const ApplicationDetails = () => {
           <Card className="shadow-sm mb-4">
             <Card.Header className="bg-primary text-white">
               <strong>Application Details</strong>
-              <div className="d-flex align-items-center">
-                <Form.Select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  style={{ maxWidth:"200px", marginRight: "10px" }}
-                >
-                  <option value="Submitted">Submitted</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Accepted">Accepted</option>
-                  <option value="Rejected">Rejected</option>
-                </Form.Select>
-                <Button
-                  variant="light"
-                  disabled={updating}
-                  onClick={handleStatusChange}
-                >
-                  {updating ? "Updating..." : "Update Status"}
-                </Button>
-              </div>
+                <div className="d-flex align-items-center mt-2">
+                  <Row>
+                    <Col className="mb-2" md={4}>
+                      <Form.Select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        style={{ maxWidth:"200px", marginRight: "10px" }}
+                      >
+                        <option value="Submitted">Submitted</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Rejected">Rejected</option>
+                      </Form.Select>
+                    </Col>
+                    <Col className="mb-2" md={4}>
+                      <Button
+                        variant="light"
+                        style={{marginRight: "10px"}}
+                        disabled={updating}
+                        onClick={handleStatusChange}
+                      >
+                        {updating ? "Updating..." : "Update Status"}
+                      </Button>
+                    </Col>
+                    <Col md={4} className="mb-2">
+                      <Button
+                        variant="warning"
+                        onClick={() => navigate(`/admin/applications/${application_id}/edit`)}
+                      >
+                        Edit Application
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
             </Card.Header>
 
             <Card.Body>
@@ -168,16 +185,20 @@ const ApplicationDetails = () => {
               <Table bordered hover responsive>
                 <tbody>
                   <tr>
+                    <td>Has Certifications</td>
+                    <td>{application.certifications.hasCertifications? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
                     <td>IELTS</td>
-                    <td>{application.certifications.scores.ielts}</td>
+                    <td>{application.certifications.scores.ielts || "-"}</td>
                   </tr>
                   <tr>
                     <td>TOEFL</td>
-                    <td>{application.certifications.scores.toefl}</td>
+                    <td>{application.certifications.scores.toefl || "-"}</td>
                   </tr>
                   <tr>
                     <td>PTE</td>
-                    <td>{application.certifications.scores.pte}</td>
+                    <td>{application.certifications.scores.pte || "-"}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -187,20 +208,24 @@ const ApplicationDetails = () => {
               <Table bordered hover responsive>
                 <tbody>
                   <tr>
+                    <td>Has Experience</td>
+                    <td>{application.workExperience.hasExperience? "Yes" : "No"}</td>
+                  </tr>
+                  <tr>
                     <td>Job Title</td>
-                    <td>{application.workExperience.experience.jobTitle}</td>
+                    <td>{application.workExperience.experience.jobTitle || "-"}</td>
                   </tr>
                   <tr>
                     <td>Company Name</td>
-                    <td>{application.workExperience.experience.companyName}</td>
+                    <td>{application.workExperience.experience.companyName || "-"}</td>
                   </tr>
                   <tr>
                     <td>Years</td>
-                    <td>{application.workExperience.experience.years}</td>
+                    <td>{application.workExperience.experience.years || "-"}</td>
                   </tr>
                   <tr>
                     <td>Related to Field</td>
-                    <td>{application.workExperience.experience.isRelated}</td>
+                    <td>{application.workExperience.experience.isRelated || "-"}</td>
                   </tr>
                 </tbody>
               </Table>

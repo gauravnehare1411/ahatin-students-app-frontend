@@ -64,7 +64,7 @@ const StudentApplications = () => {
                 <tr
                   key={app.applicationId}
                   style={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/admin/application/${app.applicationId}`)}
+                  onClick={() => navigate(`/admin/applications/${app.applicationId}`)}
                 >
                   <td>{index + 1}</td>
                   <td>{app.applicationId}</td>

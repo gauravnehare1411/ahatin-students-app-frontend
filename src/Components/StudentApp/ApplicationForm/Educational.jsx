@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { useFormStore } from "../../../store/formStore";
+import { toast } from "react-toastify";
 
 const qualificationOptions = ["Master's", "Bachelor's", "12th", "10th"];
 
@@ -45,9 +46,12 @@ const EducationalBackground = ({ nextStep }) => {
   };
 
   const handleSubmit = () => {
+    const { type, school, board, year, percentage } = highestQualification;
+    if (!type || !school || !board || !year || !percentage) {
+      toast.error("Please fill all Highest Qualification fields.");
+      return;
+    }
     setEducational({highestQualification, previousQualifications});
-
-    console.log(useFormStore.getState().formData);
 
     if (nextStep) {
       nextStep();

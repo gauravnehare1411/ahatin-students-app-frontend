@@ -27,9 +27,6 @@ api.interceptors.request.use(
 
     if (token && !isAuthEndpoint) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('✅ Token attached to:', config.url);
-    } else {
-      console.log('🚫 Token not attached to:', config.url);
     }
 
     return config;
@@ -39,21 +36,16 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    console.log('✅ Response received:', response.status, response.config.url);
     return response;
   },
   async (error) => {
-    console.log('❌ Error:', error.response?.status, error.config?.url);
-    console.log('🔄 Checking for refresh token...');
     
     const originalRequest = error.config;
     
     // If error is 401 and we haven't already tried to refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
-      console.log('🔄 Attempting token refresh...');
       
       if (isRefreshing) {
-        console.log('⏳ Refresh already in progress, adding to queue');
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then(token => {
@@ -68,7 +60,6 @@ api.interceptors.response.use(
       isRefreshing = true;
       
       // DEBUG: Check what's actually in localStorage
-      console.log('🔍 LocalStorage contents:');
       console.log('access_token:', localStorage.getItem('access_token'));
       console.log('refresh_token:', localStorage.getItem('refresh_token'));
       console.log('roles:', localStorage.getItem('roles'));
@@ -77,7 +68,6 @@ api.interceptors.response.use(
       
       // FIX: Better check for refresh token existence
       if (!refreshToken || refreshToken === 'null' || refreshToken === 'undefined') {
-        console.log('❌ No valid refresh token available');
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('roles');
@@ -86,15 +76,12 @@ api.interceptors.response.use(
       }
       
       try {
-        console.log('🔄 Requesting new tokens with refresh token');
         
         // Request new tokens using refresh token
         const response = await axios.post(
           'http://127.0.0.1:8000/token/refresh',
           { refresh_token: refreshToken }
         );
-        
-        console.log('✅ Token refresh successful:', response.data);
         
         const { access_token, refresh_token, roles } = response.data;
         
@@ -112,11 +99,8 @@ api.interceptors.response.use(
         // Process any queued requests
         processQueue(null, access_token);
         
-        // Retry the original request
-        console.log('🔄 Retrying original request:', originalRequest.url);
         return api(originalRequest);
       } catch (refreshError) {
-        console.error('❌ Token refresh failed:', refreshError.response?.data);
         // Refresh token is invalid, redirect to login
         processQueue(refreshError, null);
         localStorage.removeItem('access_token');

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
 import { useFormStore } from "../../../store/formStore";
+import { toast } from "react-toastify";
 
 export default function Certifications({ nextStep, prevStep }) {
   const { formData, setCertifications } = useFormStore();
@@ -18,6 +19,10 @@ export default function Certifications({ nextStep, prevStep }) {
   };
 
   const handleSubmit = () => {
+    if (!hasCertifications){
+      toast.error("Please fill the required fields");
+      return
+    }
     setCertifications({hasCertifications, scores});
     console.log(useFormStore.getState().formData);
     nextStep();
@@ -30,7 +35,7 @@ export default function Certifications({ nextStep, prevStep }) {
         <Row>
           <Col md={4}>
             <Form.Group className="mb-3">
-              <Form.Label>Do you have certifications?</Form.Label>
+              <Form.Label>Do you have certifications? <span style={{color:"red"}}>*</span></Form.Label>
               <Form.Select
                 value={hasCertifications}
                 onChange={(e) => setHasCertifications(e.target.value)}

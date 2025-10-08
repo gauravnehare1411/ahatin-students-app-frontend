@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
 import { useFormStore } from "../../../store/formStore";
+import { toast } from "react-toastify";
 
 const degreeOptions = ["UG", "PG", "PhD", "Diploma"];
 
@@ -23,6 +24,11 @@ export default function StudyPreferences({ nextStep, prevStep }) {
   };
 
   const handleSubmit = () => {
+    const { preferredCountry, preferredCourse, preferredIntakeMonth, preferredIntakeYear, degreeLevel } = preferences;
+    if (!preferredCountry || !preferredCourse || !preferredIntakeMonth || !preferredIntakeYear || !degreeLevel) {
+      toast.error("Please fill the required details");
+      return
+    }
     setStudyPreferences(preferences);
     console.log(useFormStore.getState().formData);
     nextStep();
@@ -35,7 +41,7 @@ export default function StudyPreferences({ nextStep, prevStep }) {
         <Row>
             <Col md={6}>
                 <Form.Group className="mb-3">
-                <Form.Label>Preferred Country</Form.Label>
+                <Form.Label>Preferred Country<span style={{color:"red"}}>*</span></Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Enter preferred country"
@@ -47,7 +53,7 @@ export default function StudyPreferences({ nextStep, prevStep }) {
 
             <Col md={6}>
                 <Form.Group className="mb-3">
-                <Form.Label>Preferred Course/Field of Study</Form.Label>
+                <Form.Label>Preferred Course/Field of Study<span style={{color:"red"}}>*</span></Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Enter preferred course or field"
@@ -60,7 +66,7 @@ export default function StudyPreferences({ nextStep, prevStep }) {
 
         <Row className="mb-3">
           <Col md={6}>
-            <Form.Label>Preferred Intake Month</Form.Label>
+            <Form.Label>Preferred Intake Month<span style={{color:"red"}}>*</span></Form.Label>
             <Form.Control
               type="text"
               placeholder="Month"
@@ -69,7 +75,7 @@ export default function StudyPreferences({ nextStep, prevStep }) {
             />
           </Col>
           <Col md={6}>
-            <Form.Label>Preferred Intake Year</Form.Label>
+            <Form.Label>Preferred Intake Year<span style={{color:"red"}}>*</span></Form.Label>
             <Form.Control
               type="text"
               placeholder="Year"
@@ -81,7 +87,7 @@ export default function StudyPreferences({ nextStep, prevStep }) {
         <Row>
           <Col md={6}>
             <Form.Group className="mb-3">
-            <Form.Label>Degree Level Interested In</Form.Label>
+            <Form.Label>Degree Level Interested In<span style={{color:"red"}}>*</span></Form.Label>
             <Form.Select
                 value={preferences.degreeLevel}
                 onChange={(e) => handleChange("degreeLevel", e.target.value)}
