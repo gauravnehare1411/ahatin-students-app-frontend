@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const fundingOptions = ["Self", "Parents", "Loan", "Scholarship", "Sponsor"];
 
-export default function FinancialInformation({ prevStep }) {
+export default function FinancialInformation({ nextStep, prevStep }) {
   const { formData, setFinancialInformation, resetForm } = useFormStore();
 
   const navigate = useNavigate();
@@ -24,20 +24,7 @@ export default function FinancialInformation({ prevStep }) {
 
   const handleSubmit = async () => {
     setFinancialInformation(finance);
-    const finalData = useFormStore.getState().formData;
-
-    try {
-      const response = await api.post(
-        "/submit-application",
-        finalData
-      );
-      toast.success(response.data.message);
-      resetForm();
-      navigate('/');
-    } catch (error) {
-      toast.error("Error submitting application");
-      console.error(error);
-    }
+    nextStep();
   }
 
   return (
@@ -73,7 +60,7 @@ export default function FinancialInformation({ prevStep }) {
             Previous
           </Button>
           <Button variant="primary" onClick={handleSubmit}>
-            Submit
+            Submit & Next 
           </Button>
         </div>
       </Card.Body>

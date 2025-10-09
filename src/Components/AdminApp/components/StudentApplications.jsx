@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Card, Table, Spinner, Container, Alert } from "react-bootstrap";
+import { Card, Table, Spinner, Container, Alert, Button } from "react-bootstrap";
 import api from "../../../api";
+import { Trash } from "react-bootstrap-icons";
+import { toast } from "react-toastify";
 
 const StudentApplications = () => {
   const { userId } = useParams();
@@ -22,6 +24,19 @@ const StudentApplications = () => {
     }
     fetchApplications();
   }, [userId]);
+
+  const handleDelete = async (applicationId) => {
+    if (!window.confirm("Are you sure you want to delete this application?")) return;
+
+    try {
+      await api.delete(`/applications/${applicationId}`);
+      setApplications((prev) => prev.filter((app) => app.applicationId !== applicationId));
+      toast.success("Application deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting application:", error);
+      toast.error("Failed to delete application.");
+    }
+  };
 
   if (loading) {
     return (
@@ -57,6 +72,7 @@ const StudentApplications = () => {
                 <th>Preferred Course</th>
                 <th>Status</th>
                 <th>Updated At</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -84,6 +100,18 @@ const StudentApplications = () => {
                     </span>
                   </td>
                   <td>{new Date(app.updatedAt).toLocaleDateString()}</td>
+                  <td>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(app.applicationId);
+                      }}
+                    >
+                      <Trash />
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>

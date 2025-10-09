@@ -40,7 +40,6 @@ const AdminDashboard = () => {
     navigate(`/admin/${userId}`);
   };
 
-  // --- Edit ---
   const openEditModal = (e, user) => {
     e.stopPropagation();
     setSelectedUser(user);
@@ -101,7 +100,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // --- Delete ---
   const handleDelete = async (e, userId) => {
     e.stopPropagation();
     const confirmed = window.confirm('Are you sure you want to delete this user?');
@@ -122,7 +120,7 @@ const AdminDashboard = () => {
   return (
     <Container className="mt-4">
       <h2 className="mb-4">Students</h2>
-      <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total Introducers - {totalUsers}</Badge>
+      <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total Students - {totalUsers}</Badge>
       {loadingList ? (
         <div className="d-flex justify-content-center py-5">
           <Spinner animation="border" role="status" />

@@ -98,6 +98,7 @@ const EducationalBackground = ({ nextStep }) => {
                 </Col>
                 <Col md={6}>
                   <Form.Control
+                    type="number"
                     placeholder="Year of Passing"
                     value={highestQualification.year}
                     onChange={(e) => handleHighestChange("year", e.target.value)}
@@ -153,6 +154,7 @@ const EducationalBackground = ({ nextStep }) => {
                   <Col md={6}>
                     <Form.Control
                       placeholder="Year of Passing"
+                      type="number"
                       value={qual.year}
                       onChange={(e) => handleQualificationChange(index, "year", e.target.value)}
                     />

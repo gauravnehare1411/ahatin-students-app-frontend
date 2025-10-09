@@ -5,6 +5,7 @@ import StudyPreferences from './ApplicationForm/StudyPreferences';
 import Certifications from './ApplicationForm/Certifications';
 import WorkExperience from './ApplicationForm/WorkExperience';
 import FinancialInformation from './ApplicationForm/FinancialInformation';
+import ReviewApplication from './ApplicationForm/ReviewApplication';
 
 export default function ApplicationForm() {
   const [step, setStep] = useState(1);
@@ -24,8 +25,10 @@ export default function ApplicationForm() {
         return <Certifications nextStep={nextStep} prevStep={prevStep} />
       case 4:
         return <WorkExperience nextStep={nextStep} prevStep={prevStep} />
+      case 5:
+        return <FinancialInformation nextStep={nextStep} prevStep={prevStep} />
       default:
-        return <FinancialInformation prevStep={prevStep} />;
+        return <ReviewApplication prevStep={prevStep} />
     }
   };
 
@@ -57,6 +60,11 @@ export default function ApplicationForm() {
             <Nav.Item>
               <Nav.Link onClick={() => setStep(5)} active={step === 5}>
                 Financial Information
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link onClick={() => setStep(6)} active={step === 6}>
+                Review Application
               </Nav.Link>
             </Nav.Item>
           </Nav>
