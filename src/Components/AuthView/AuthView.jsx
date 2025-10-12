@@ -88,15 +88,18 @@ const AuthView = () => {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
 
+      console.log(res.data);
+      
       login(res.data);
       toast.success("Login successful!");
+      
+      setTimeout(() => {
       if (res.data.roles?.includes('student')){
-        console.log(res.data.roles?.includes('student'));
-        navigate('/');
-      } else {
-        console.log(res.data.roles?.includes('student'));
-        navigate('/admin');
-      }
+          navigate('/');
+        } else {
+          navigate('/admin');
+        }
+      }, 1000);
       
     } catch (err) {
       console.error(err.response?.data || err);
@@ -224,7 +227,9 @@ const AuthView = () => {
                 <Button type="submit" variant="primary">
                   {isRegister ? "Next" : "Login"}
                 </Button>
+                
                 <Button
+                  type="button"
                   variant="outline-secondary"
                   onClick={() => setIsRegister(!isRegister)}
                 >
@@ -232,6 +237,7 @@ const AuthView = () => {
                 </Button>
               </div>
             </Form>
+
             {!isRegister && 
               <Button variant="link" onClick={() => setShowForgotModal(true)}>
                 Forgot Password?
@@ -293,10 +299,6 @@ const AuthView = () => {
           </Form>
         </Modal.Body>
       </Modal>
-
-      <footer className="text-center py-3 bg-white border-top">
-        <small className="text-secondary">AHatIn - International & Educational Hat</small>
-      </footer>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000',
+  baseURL: 'ahatin-students-app-production.up.railway.app',
 });
 
 let isRefreshing = false;
@@ -41,8 +41,10 @@ api.interceptors.response.use(
   async (error) => {
     
     const originalRequest = error.config;
+    const skipAuth = ['/login', '/register'];
+    const isAuthEndpoint = skipAuth.some(url => originalRequest.url.includes(url));
     
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -70,7 +72,7 @@ api.interceptors.response.use(
       
       try {
         const response = await axios.post(
-          'http://127.0.0.1:8000/token/refresh',
+          'ahatin-students-app-production.up.railway.app/token/refresh',
           { refresh_token: refreshToken }
         );
         

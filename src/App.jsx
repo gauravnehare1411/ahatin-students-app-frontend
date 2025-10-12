@@ -6,6 +6,7 @@ import FormsApp from './Components/StudentApp/FormsApp.jsx';
 import StudentDashboard from './Components/StudentApp/StudentDashboard.jsx';
 import AdminApp from './Components/AdminApp/AdminApp.jsx';
 import AuthView from './Components/AuthView/AuthView.jsx';
+import Footer from './Components/includes/Footer.jsx';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           </Routes>
           <ToastContainer position='top-center' autoClose={3000} hideProgressBar />
         </Router>
+        <Footer />
       </div>
     </>
   )
