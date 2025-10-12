@@ -9,7 +9,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/auth');
   };
 
   const navigateDashboard = () => {

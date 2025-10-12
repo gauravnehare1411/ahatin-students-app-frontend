@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Form, Button, Card, Container, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../../api';
+import api from '../../src/api';
 import { toast } from 'react-toastify';
 import PasswordResetModal from './PasswordResetModal';
-import useAuthStore from '../../store/authStore';
+import useAuthStore from '../../src/store/authStore';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });

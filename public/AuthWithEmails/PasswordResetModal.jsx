@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import api from '../../api';
+import api from '../../src/api';
 import { toast } from 'react-toastify';
 
 const PasswordResetModal = ({ show, onHide, emailRequired = true, defaultEmail = '' }) => {

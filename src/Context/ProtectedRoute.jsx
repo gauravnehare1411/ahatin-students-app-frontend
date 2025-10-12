@@ -6,12 +6,11 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const location = useLocation();
   
   const isAllowed = isLoggedIn && userRoles.some(role => allowedRoles.includes(role));
-  console.log(isAllowed);
 
   if (isAllowed) {
     return children
   }
-  return <Navigate to="/login" state={{ from: location }} replace />;
+  return <Navigate to="/auth" state={{ from: location }} replace />;
 };
 
 export default ProtectedRoute;

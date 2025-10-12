@@ -1,18 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import RegisterPage from './Components/AuthView/RegisterPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './Components/AuthView/LoginPage';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './Context/ProtectedRoute.jsx';
 import FormsApp from './Components/StudentApp/FormsApp.jsx';
 import StudentDashboard from './Components/StudentApp/StudentDashboard.jsx';
 import AdminApp from './Components/AdminApp/AdminApp.jsx';
+import AuthView from './Components/AuthView/AuthView.jsx';
 
 function App() {
   return (
     <>
       <div>
-        <Router>
+        <Router basename='portal'>
           <Routes>
             <Route path="/application/*" element={
               <ProtectedRoute allowedRoles={["student"]}>
@@ -32,8 +31,7 @@ function App() {
               </ProtectedRoute>
             } />
             
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/login" element={<LoginPage/>} />
+            <Route path="/auth" element={<AuthView/>} />
           </Routes>
           <ToastContainer position='top-center' autoClose={3000} hideProgressBar />
         </Router>

@@ -22,7 +22,7 @@ const processQueue = (error, token = null) => {
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
-    const skipAuth = ['/token', '/register'];
+    const skipAuth = ['/login', '/register'];
     const isAuthEndpoint = skipAuth.some((url) => config.url.includes(url));
 
     if (token && !isAuthEndpoint) {
@@ -42,7 +42,6 @@ api.interceptors.response.use(
     
     const originalRequest = error.config;
     
-    // If error is 401 and we haven't already tried to refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
       
       if (isRefreshing) {
@@ -59,25 +58,17 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
       
-      // DEBUG: Check what's actually in localStorage
-      console.log('access_token:', localStorage.getItem('access_token'));
-      console.log('refresh_token:', localStorage.getItem('refresh_token'));
-      console.log('roles:', localStorage.getItem('roles'));
-      
       const refreshToken = localStorage.getItem('refresh_token');
       
-      // FIX: Better check for refresh token existence
       if (!refreshToken || refreshToken === 'null' || refreshToken === 'undefined') {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('roles');
-        window.location.href = '/app/sign-in';
+        window.location.href = '/portal/auth';
         return Promise.reject(error);
       }
       
       try {
-        
-        // Request new tokens using refresh token
         const response = await axios.post(
           'http://127.0.0.1:8000/token/refresh',
           { refresh_token: refreshToken }
@@ -92,21 +83,18 @@ api.interceptors.response.use(
           localStorage.setItem('roles', JSON.stringify(roles));
         }
         
-        // Update the authorization header
         api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
         originalRequest.headers.Authorization = `Bearer ${access_token}`;
         
-        // Process any queued requests
         processQueue(null, access_token);
         
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh token is invalid, redirect to login
         processQueue(refreshError, null);
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('roles');
-        window.location.href = '/login';
+        window.location.href = '/portal/auth';
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

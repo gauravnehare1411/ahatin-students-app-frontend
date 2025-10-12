@@ -72,7 +72,7 @@ export default function StudentDashboard() {
                     <tr
                     key={app.applicationId}
                     style={{ cursor: "pointer" }}
-                    onClick={() => (window.location.href = `/application/${app.applicationId}`)}
+                    onClick={() => (window.location.href = `/portal/application/${app.applicationId}`)}
                     >
                     <td>{index + 1}</td>
                     <td>{app.studyPreferences?.preferredCountry}</td>

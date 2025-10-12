@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Button, Card, Container, Modal } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../../api';
+import api from '../../src/api';
 import { toast } from 'react-toastify';
-import useAuthStore from '../../store/authStore';
+import useAuthStore from '../../src/store/authStore';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
